@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CACAO-RDC |</title>
+    <link rel="stylesheet" href="./style/main.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <img src="/img/icon.png" alt="Logo Cacao" class="logo">
+      <h1>Cacao Connect RDC</h1>
+    </div>
+
+    <div class="header-right">
+      <div class="price">Prix mercurial : <strong></strong><span>$/Kg</span></div>
+
+      <!-- Variante 1 : si connecté -->
+      <img src="/img/icon.png" alt="Profil" class="profile-pic" onclick="window.location.href='profile.html'">
+
+      <!-- Variante 2 : si non connecté -->
+      <button class="btn-login btn-deconnect">Se deconnecter</button>
+      <!-- <a href="login.html" class="btn-signup">S'inscrire</a> -->
+    </div>
+  </header>
+
+  <aside id="sidebar">
+    <h2>Menu</h2>
+    <div></div>
+  </aside>
+
+    <!-- Contenu dynamique -->
+    <main class="main-content" id="main-content">
+
+      <div class="content">
+      </div>
+
+      <dialog id="close-dialog" class="dialog">
+        
+
+      </dialog>
+
+    </main>
+      
+
+</body>
+<script type="module" src="./js/index.js"></script>
+</html>

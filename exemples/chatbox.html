@@ -1,0 +1,33 @@
+<div class="chatbox-container">
+  <div class="chatbox-header">
+    <img src="/img/icon.png" alt="Exportateur A" />
+    <div class="chatbox-user-info">
+      <h4>Exportateur A</h4>
+      <p>En ligne</p>
+    </div>
+  </div>
+
+  <div class="chatbox-messages" id="messages">
+    <div class="chat-message left">
+      <div class="message-bubble">
+        Bonjour, avez-vous du stock disponible ?
+      </div>
+    </div>
+    <div class="chat-message right">
+      <div class="message-bubble">
+        Oui, nous avons 2 tonnes prêtes à être expédiées.
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulaire d’envoi -->
+  <form class="chatbox-input" onsubmit="sendMessage(event)">
+    <input type="text" id="messageInput" placeholder="Écrire un message..." required />
+    <button type="submit">
+      <!-- Icône flèche en papier style WhatsApp -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="white">
+        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+      </svg>
+    </button>
+  </form>
+</div>
