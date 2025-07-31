@@ -1,12 +1,10 @@
 import { checkAuth } from "./controller/authentification/checkauth";
 import { authManager } from "./httplibs/auth";
-import { collection, getDoc, onSnapshot } from "firebase/firestore";
+import { collection, getDoc, onSnapshot, serverTimestamp } from "firebase/firestore";
 import { firestore } from "./httplibs/firebaseconfig";
 
-
 import { menuController } from "./controller/menuController/menu";
-import { expotateurController } from "./controller/customers/exportateur";
-import { cooperativeController } from "./controller/customers/cooperative";
+import { customersController } from "./controller/customers/customers";
 
 class App {
     #dialog; 
@@ -18,8 +16,10 @@ class App {
         this.#dialog = document.querySelector("dialog");
         this.#aside = document.querySelector("#sidebar");
         this.#content = document.querySelector("#main-content .content")
+
+        window.location.hash = "cooperative"; // Set default hash to cooperative
         
-        this.#content.innerHTML = "";
+        // this.#content.innerHTML = "";
         this.handleDialogClickEvents();
     } 
 
@@ -40,7 +40,7 @@ class App {
 
         this.#user = await authManager.getUserFirestore();
 
-        this.#getMercurial();
+        // this.#getMercurial();
 
         this.#aside.querySelector("div").innerHTML = `<div class="loader"></div>`;
 
@@ -48,23 +48,11 @@ class App {
 
         menuController.apperenceManageShow();
 
-        await cooperativeController.init()
+        // initialize controllers
+        await customersController.init(this.#user.data.type);
 
-        this.handleHashChangeEvent(); 
     }
 
-    handleHashChangeEvent(){
-    window.addEventListener("hashchange", async (e) => {
-        const hash = window.location.hash.replace("#", "");
-
-        // Ex : #home => affiche home page
-        if(hash === "cooperative"){
-            this.#content.innerHTML = await cooperativeController.render();
-        } else if(hash === "exportateur"){
-            this.#content.innerHTML = await expotateurController.render();
-        }
-    });
-}
 
     handleDialogClickEvents(){
         const dialog = document.querySelector("dialog"); 
@@ -76,6 +64,33 @@ class App {
     }
 
     async #getMercurial(){
+        // const API_KEY = "YOUR_API_KEY";  // 🔁 Remplace avec ta vraie clé
+        // const API_URL = `https://commodities-api.com/api/latest?base=USD&symbols=COCOA`;
+
+        // try {
+        //     const response = await fetch(API_URL, {
+        //     headers: {
+        //         Authorization: `Bearer ${API_KEY}`,
+        //     },
+        //     });
+
+        //     if (!response.ok) {
+        //         throw new Error(`Erreur API : ${response.status}`);
+        //     }
+
+        //     const data = await response.json();
+
+        //     if (data && data.data && data.data.rates && data.data.rates.COCOA) {
+        //         const cocoaPrice = data.data.rates.COCOA;
+        //         console.log(`💰 Prix du cacao : $${cocoaPrice} USD/tonne`);
+        //     } else {
+        //         console.log("❌ Données cacao non disponibles.");
+        //     }
+
+        // } catch (error) {
+        //     console.error("⚠️ Erreur lors de la récupération du prix du cacao :", error.message);
+        // }
+
         const mercurialRef = collection(firestore, "prix_mercurial");
         onSnapshot(mercurialRef, (snapshot) => {
             snapshot.forEach((doc) => {

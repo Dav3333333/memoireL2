@@ -1,13 +1,66 @@
 import { firestore, auth } from "./firebaseconfig";
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { getDocs, query, collection, where} from "firebase/firestore";
-
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { getDocs, query, collection, where, doc, updateDoc, serverTimestamp} from "firebase/firestore";
 
 
 class AuthManager {
     #auth;
     constructor() {
         this.#auth = auth;
+        // this.initAuthListener();
+    }
+
+    initAuthListener() {
+        onAuthStateChanged(this.#auth, (user) => {
+            if (user) {
+                const userRef = doc(firestore, "users", user.uid);
+
+                // En ligne à la connexion
+                updateDoc(userRef, {
+                    status: "online",
+                    lastSeen: serverTimestamp()
+                });
+
+                // Déconnexion fermeture onglet
+                window.addEventListener("beforeunload", async () => {
+                    try {
+                        await updateDoc(userRef, {
+                            status: "offline",
+                            lastSeen: serverTimestamp()
+                        });
+                    } catch (err) {
+                        console.error("Erreur beforeunload :", err);
+                    }
+                });
+
+                // Réseau offline
+                window.addEventListener("offline", async () => {
+                    try {
+                        await updateDoc(userRef, {
+                            status: "offline",
+                            lastSeen: serverTimestamp()
+                        });
+                    } catch (err) {
+                        console.error("Erreur offline :", err);
+                    }
+                });
+
+                // Réseau online
+                window.addEventListener("online", async () => {
+                    try {
+                        await updateDoc(userRef, {
+                            status: "online",
+                            lastSeen: serverTimestamp()
+                        });
+                    } catch (err) {
+                        console.error("Erreur online :", err);
+                    }
+                });
+
+            } else {
+                console.log("Utilisateur non connecté");
+            }
+        });
     }
 
     async getUserFirestore(){
@@ -37,6 +90,7 @@ class AuthManager {
     getUserSession() {
         const userSession = localStorage.getItem("userSession");
         localStorage.cacaoUser? localStorage.removeItem("cacaoUser") : null;
+
         return userSession ? JSON.parse(userSession) : null;
     }
 

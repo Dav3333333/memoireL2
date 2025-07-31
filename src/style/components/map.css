@@ -1,0 +1,19 @@
+#map-container {
+    padding: 20px;
+    background-color: var(--bg-light);
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#map-container h3 {
+    margin-bottom: 10px;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+#map {
+    height: 400px;
+    width: 100%;
+    border: 2px solid var(--primary-color);
+    border-radius: 10px;
+}

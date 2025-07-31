@@ -18,7 +18,7 @@ export function createMapModal(onSelect) {
   `;
 
   setTimeout(() => {
-    if (!leafletMap) {
+    if (!leafletMap || leafletMap) {
       leafletMap = L.map("mapContainer").setView([0.491942, 29.472851], 13);
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: "&copy; OpenStreetMap contributors",
