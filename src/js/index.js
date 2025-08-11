@@ -73,15 +73,13 @@ class App {
 
     checkAuth() {
         const userSession = checkAuth.check();
-        console.log(userSession);
-        console.log(userSession.uid)
         if (userSession.uid) {
             console.log("User is authenticated:", userSession);
             // Redirect to dashboard or main page
         } else {
             console.log("User is not authenticated.", userSession);
             // Redirect to login page
-            // window.location.href = "login.html"; // Change to your login page
+            window.location.href = "login.html"; // Change to your login page
         }
     }
 
@@ -128,4 +126,5 @@ class App {
 }
 
 const app = new App();
+
 app.init()
