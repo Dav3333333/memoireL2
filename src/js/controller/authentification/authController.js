@@ -1,7 +1,7 @@
 import { createMapModal } from './mapModal.js';
 import { addDoc, collection , doc, serverTimestamp} from 'firebase/firestore';
 import { firestore } from '../../httplibs/firebaseconfig.js';
-import { authManager } from '../../httplibs/authApp.js';
+import { authManager } from '../../httplibs/auth.js';
 
 
 class Authcontroller {
@@ -403,3 +403,4 @@ class Authcontroller {
 
 export const authcontroller = new Authcontroller();
 authcontroller;
+
