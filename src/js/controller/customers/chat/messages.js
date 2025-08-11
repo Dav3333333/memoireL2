@@ -15,11 +15,16 @@ class MessagesController {
     #idCurrentUser;
     #typeUser;
     #mainContainer;
+    #principalContainer;
 
     constructor() {
         this.#idCurrentUser = null;
         this.#typeUser = null;
-        this.#mainContainer = document.querySelector("#main-content .content");
+        
+        this.#principalContainer = document.querySelector("#main-content .content");
+        this.#mainContainer = document.createElement("div");
+        this.#principalContainer.innerHTML = "";
+        this.#principalContainer.appendChild(this.#mainContainer);
     }
 
     async init(idCurrentUser, typeUser) {
@@ -82,6 +87,8 @@ class MessagesController {
 
         container.addEventListener("click", this.#handleCardClick.bind(this));
         this.#mainContainer.appendChild(container);
+        this.#principalContainer.innerHTML = "";
+        this.#principalContainer.appendChild(this.#mainContainer);
     }
 
     #handleCardClick(event) {
@@ -106,7 +113,7 @@ class MessagesController {
                         <p>En ligne</p>
                     </div>
                 </div>
-                <div class="chatbox-messages" id="messages"></div>
+                <div class="chatbox-messages" id="messages"><div class="loader-green"></div> <span>Chargement...</span></div>
                 <form class="chatbox-input" id="chat-form">
                     <input type="text" id="messageInput" placeholder="Écrire un message..." required autocomplete="off" />
                     <button type="submit" aria-label="Envoyer">
@@ -150,6 +157,11 @@ class MessagesController {
             if (!messagesBox) return;
 
             messagesBox.innerHTML = "";
+
+            if (snapshot.empty) {
+                messagesBox.innerHTML = "<p>Aucun message trouvé.</p>";
+                return;
+            }
 
             snapshot.forEach(doc => {
                 const msg = doc.data();

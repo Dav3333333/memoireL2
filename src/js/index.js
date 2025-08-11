@@ -1,10 +1,11 @@
-import { checkAuth } from "./controller/authentification/checkauth";
 import { authManager } from "./httplibs/auth";
 import { collection, getDoc, onSnapshot, serverTimestamp } from "firebase/firestore";
 import { firestore } from "./httplibs/firebaseconfig";
 
 import { menuController } from "./controller/menuController/menu";
 import { customersController } from "./controller/customers/customers";
+
+import { checkAuth } from "./controller/authentification/checkauth";
 
 class App {
     #dialog; 
@@ -16,8 +17,6 @@ class App {
         this.#dialog = document.querySelector("dialog");
         this.#aside = document.querySelector("#sidebar");
         this.#content = document.querySelector("#main-content .content")
-
-        window.location.hash = "cooperative"; // Set default hash to cooperative
         
         // this.#content.innerHTML = "";
         this.handleDialogClickEvents();
@@ -28,25 +27,23 @@ class App {
         const online = await authManager.isOnline();
         
         if(!online){
-            this.openDialog("<div>check your internet </div>")
+            this.openDialog("<div>check your internet  And reload </div>")
             return;
         }
 
         this.checkAuth();
 
-        document.querySelector(".btn-deconnect").addEventListener("click", () => {
-            checkAuth.deconect();
-        });
-
         this.#user = await authManager.getUserFirestore();
 
-        // this.#getMercurial();
+        this.#getMercurial();
 
         this.#aside.querySelector("div").innerHTML = `<div class="loader"></div>`;
 
         this.#aside.querySelector("div").innerHTML = menuController.render(this.#user.data.type);
 
         menuController.apperenceManageShow();
+
+        this.#toggleMenu();
 
         // initialize controllers
         await customersController.init(this.#user.data.type);
@@ -64,32 +61,6 @@ class App {
     }
 
     async #getMercurial(){
-        // const API_KEY = "YOUR_API_KEY";  // 🔁 Remplace avec ta vraie clé
-        // const API_URL = `https://commodities-api.com/api/latest?base=USD&symbols=COCOA`;
-
-        // try {
-        //     const response = await fetch(API_URL, {
-        //     headers: {
-        //         Authorization: `Bearer ${API_KEY}`,
-        //     },
-        //     });
-
-        //     if (!response.ok) {
-        //         throw new Error(`Erreur API : ${response.status}`);
-        //     }
-
-        //     const data = await response.json();
-
-        //     if (data && data.data && data.data.rates && data.data.rates.COCOA) {
-        //         const cocoaPrice = data.data.rates.COCOA;
-        //         console.log(`💰 Prix du cacao : $${cocoaPrice} USD/tonne`);
-        //     } else {
-        //         console.log("❌ Données cacao non disponibles.");
-        //     }
-
-        // } catch (error) {
-        //     console.error("⚠️ Erreur lors de la récupération du prix du cacao :", error.message);
-        // }
 
         const mercurialRef = collection(firestore, "prix_mercurial");
         onSnapshot(mercurialRef, (snapshot) => {
@@ -117,6 +88,41 @@ class App {
     openDialog(content){
         this.#dialog.innerHTML = content;
         this.#dialog.showModal();
+    }
+
+    #toggleMenu(){
+        const sidebar = document.getElementById("sidebar");
+        const toggleBtn = document.querySelector(".toggle-menu");
+
+        // show the button too the screen
+        const handleResize = () => {
+            if (window.innerWidth <= 768) {
+            toggleBtn.style.display = "block";
+            } else {
+            toggleBtn.style.display = "none";
+            sidebar.classList.remove("active");
+            }
+        };
+
+        toggleBtn.addEventListener("click", () => {
+            console.log("clicked")
+            sidebar.classList.toggle("active");
+        });
+
+        document.addEventListener("click", (e) => {
+            if (
+            window.innerWidth <= 768 &&
+            sidebar.classList.contains("active") &&
+            !sidebar.contains(e.target) &&
+            !toggleBtn.contains(e.target)
+            ) {
+            sidebar.classList.remove("active");
+            }
+        });
+
+        window.addEventListener("resize", handleResize);
+
+        handleResize();
     }
 
 }

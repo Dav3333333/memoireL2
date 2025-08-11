@@ -4,6 +4,7 @@ import { collection, query, where, onSnapshot, getDoc } from "firebase/firestore
 import { auth, firestore } from "../../httplibs/firebaseconfig";
 import { messagesController } from "./chat/messages";
 import { authManager } from "../../httplibs/auth";
+import { profileController } from "./profil/profile";
 
 
 class ExpotateurController {
@@ -15,9 +16,12 @@ class ExpotateurController {
     constructor() {
         this.#principalContainer = document.querySelector("#main-content .content");
         this.#mainContainer = document.createElement("div");
-        window.location.hash = "cooperative";
+
+        window.location.hash = "cooperative"; // Set default hash to cooperative
 
         this.#user = null;
+
+        this.#principalContainer.innerHTML = `<span><div class="loader-green"></div></span>`;
 
         this.#handleHashChangeEvent();
     }
@@ -40,7 +44,9 @@ class ExpotateurController {
             }
 
             if (hash == "profil") {
-                return;
+                if (!this.#user) return;
+                this.#principalContainer.innerHTML = "<p>Chargement du profil...</p>";
+                await profileController.init(this.#user.data.data.id, this.#user.data.type);
             }
 
             console.log("Hash changed form exporter type count to:", hash);
@@ -50,23 +56,25 @@ class ExpotateurController {
     async #handleClickMainContainer() {
         this.#mainContainer.addEventListener("click", (e) => {
             const target = e.target;
+            const coop = (c, lat , lng)=>{ return {
+                    nom: c.getAttribute("nom"),
+                    ville: c.getAttribute("ville"),
+                    quartier: c.getAttribute("quartier"),
+                    avenu: c.getAttribute("avenu"),
+                    numero: c.getAttribute("num"),
+                    email: c.getAttribute("email"),
+                    phone : c.getAttribute("phone"),
+                    stockCacao : c.getAttribute("stockcacao"),
+                    lat: lat,
+                    lng: lng, 
+                    datecreation : c.getAttribute("datecreation"),
+                }};
             if (target.classList.contains("cooperative-card")) {
                 const lat = parseFloat(target.getAttribute("lat"));
                 const lng = parseFloat(target.getAttribute("log"));
                 const c = target;
 
-                this.#afficherCooperativeAvecOnglets({
-                    nom: target.getAttribute("nom"),
-                    ville: target.getAttribute("ville"),
-                    quartier: target.getAttribute("quartier"),
-                    avenu: target.getAttribute("avenu"),
-                    email: target.getAttribute("email"),
-                    numero: target.getAttribute("numero"),
-                    phone : target.getAttribute("phone"),
-                    stockCacao : target.getAttribute("stockcacao"),
-                    lat: lat,
-                    lng: lng
-                });
+                this.#afficherCooperativeAvecOnglets(coop(c, lat, lng));
                 return;
             }
 
@@ -75,18 +83,7 @@ class ExpotateurController {
                 const lat = parseFloat(c.getAttribute("lat"));
                 const lng = parseFloat(c.getAttribute("log"));
                 
-                this.#afficherCooperativeAvecOnglets({
-                    nom: c.getAttribute("nom"),
-                    ville: c.getAttribute("ville"),
-                    quartier: c.getAttribute("quartier"),
-                    avenu: c.getAttribute("avenu"),
-                    email: c.getAttribute("email"),
-                    numero: c.getAttribute("numero"),
-                    phone : c.getAttribute("phone"),
-                    stockCacao : c.getAttribute("stockcacao"),
-                    lat: lat,
-                    lng: lng
-                });
+                this.#afficherCooperativeAvecOnglets(coop(c, lat, lng));
                 return;
             }
 
@@ -109,7 +106,7 @@ class ExpotateurController {
 
     #initCooperatives() {
         this.#initCustomers();
-        this.#principalContainer.innerHTML = "";
+        this.#principalContainer.innerHTML = ``;
         this.#principalContainer.appendChild(this.#mainContainer);
     }
 
@@ -133,6 +130,7 @@ class ExpotateurController {
     #renderCustomersFromSnapshot(customers) {
         this.#mainContainer.innerHTML = "";
         const container = document.createElement('div');
+        container.innerHTML = "<h4>Coopératives</h4>";
         container.classList.add("cooperative-list");
 
         customers.forEach(customer => {
@@ -144,13 +142,14 @@ class ExpotateurController {
             const geo_loc = customer.data.geo_loc ?? { lat: 0, long: 0 };
             const email = customer.data.contact.mail;
             const phone = customer.data.contact.phone;
-            const stockCacao = customer.data.stock_solde
+            const stockCacao = customer.data.stock_solde;
+            const datecreation = customer.data.datecreation ? customer.data.datecreation.toDate().toLocaleDateString() : "Non spécifié";
 
             const card = `
-                <div class="cooperative-card" id="${customer.id}" lat="${geo_loc.lat}" log="${geo_loc.long}" email="${email}" phone="${phone}" nom="${nom}" ville="${ville}" quartier="${quartier}" avenu="${avenu}"  num="${numero}" stockcacao="${stockCacao}">
+                <div class="cooperative-card" id="${customer.id}" lat="${geo_loc.lat}" log="${geo_loc.long}" email="${email}" phone="${phone}" nom="${nom}" ville="${ville}" quartier="${quartier}" avenu="${avenu}"  num="${numero}" stockcacao="${stockCacao}" datecreation="${datecreation}">
                     <div class="cooperative-info">
                         <h3 class="cooperative-info__title">${nom}</h3>
-                        <p class="cooperative-info__adress">${ville}, ${quartier} ${avenu} ${numero}</p>
+                        <p class="cooperative-info__adress">${ville}, ${quartier}, ${avenu},${numero}</p>
                     </div>
                     <div class="cooperative-stock">
                         <strong>Stock :</strong>
@@ -196,13 +195,35 @@ class ExpotateurController {
     #chargerDetailView(coop) {
         const content = document.getElementById("coop-view-content");
         content.innerHTML = `
-            <div class="coop-detail">
-                <h3>${coop.nom}</h3>
-                <p><strong>Email :</strong> ${coop.email ?? "Non spécifié"}</p>
-                <p><strong>Téléphone :</strong> ${coop.phone ?? "Non spécifié"}</p>
-                <p><strong>Adresse :</strong> ${coop.ville ?? ""}, ${coop.quartier ?? ""} ${coop.avenu ?? ""} ${coop.numero ?? ""}</p>
-                <p><strong>Stock actuel Cacao :</strong> ${coop.stockCacao ?? "Non spécifié"} Kg</p>
-            </div>
+                <h2>Détails - Coopérative Cacao Kivu</h2>
+
+                <div class="dashboard-grid">
+                    
+                    <div class="dashboard-section dashboard-stock-list">
+                    <h3>Produits en stock</h3>
+                    <div class="stock-card-container">
+                        <!-- Les cartes des produits seront injectées ici -->
+                        <div class="stock-card">
+                        <h4 class="stock-card-title">Cacao Forastero</h4>
+                        <p class="stock-card-quantite">1.2 tonnes disponibles</p>
+                        </div>
+
+                        <div class="stock-card">
+                        <h4 class="stock-card-title">Cacao Criollo</h4>
+                        <p class="stock-card-quantite">0.8 tonnes disponibles</p>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="dashboard-section dashboard-coop-details">
+                        <h3>Informations sur la coopérative</h3>
+                        <p><strong>Nom :</strong> <span class="coop-nom">${coop.nom}</span></p>
+                        <p><strong>E-mail :</strong> <span class="coop-nom">${coop.email ?? "Non spécifié"}</span></p>
+                        <p><strong>Contact :</strong> <span class="coop-contact">${coop.phone ?? "Non spécifié"}</span></p>
+                        <p><strong>Responsable :</strong> <span class="coop-responsable">M. Bisimwa</span></p>
+                        <p><strong>Date d'enregistrement :</strong> <span class="coop-date">${coop.datecreation}</span></p>
+                        <p><strong>Adresse :</strong> <span class="coop-adresse">${coop.ville}, ${coop.quartier}, ${coop.avenu} ${coop.numero}</span></p>
+                    </div>
+                </div>
         `;
     }
 

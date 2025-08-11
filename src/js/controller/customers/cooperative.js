@@ -8,6 +8,7 @@ import { collection, query, where, onSnapshot, getDoc } from "firebase/firestore
 import { auth, firestore } from "../../httplibs/firebaseconfig";
 import { messagesController } from "./chat/messages";
 import { authManager } from "../../httplibs/auth";
+import { profileController } from "./profil/profile";
 
 
 /** * CooperativeController
@@ -18,50 +19,68 @@ import { authManager } from "../../httplibs/auth";
 class CooperativeController {
     #principalContainer;
     #mainContainer;
-
     #user;
 
     constructor() {
-        window.location.hash = "exportateur"; // Set default hash to cooperative
-
         this.#principalContainer = document.querySelector("#main-content .content");
         this.#mainContainer = document.createElement("div");
-
-        this.#user = null;
-
-        this.#principalContainer.innerHTML = "";
+        this.#principalContainer.innerHTML = `<span><div class="loader-green"></div></span>`;
         this.#principalContainer.appendChild(this.#mainContainer);
+        this.#user = null;
     }
-    
-    async init(){
+
+    async init() {
         try {
+            // Force un hash par défaut si absent
+            window.location.hash = "exportateurs";
+
             this.#user = await authManager.getUserFirestore();
-            this.#initCustomers();
-            this.#handleHashChangeEvent();
+            this.#handleHashChangeEvent(); // Écouteur
+            this.#navigateByHash();        // Navigation initiale
         } catch (error) {
-            console.error("Error initializing customers:", error);
+            console.error("Error initializing:", error);
         }
     }
 
-    #handleHashChangeEvent(){
-        window.addEventListener("hashchange", async (e) => {
-            const hash = window.location.hash.replace("#", "");
 
-            console.log("Hash changed form cooperative type to:", hash);
+    //  Cette méthode gère ce qu’il faut afficher en fonction du hash
+    async #navigateByHash() {
+        const hash = window.location.hash.replace("#", "");
+        console.log("Navigating to:", hash);
 
-            if (hash == "messagerie") {
-                if(!this.#user){
-                    return
-                }
-                messagesController.init(this.#user.data.data.id, this.#user.data.type);
-                return;
-            }
-            
+        // Réinitialise tout
+        this.#principalContainer.innerHTML = ``;
+        this.#mainContainer = document.createElement("div");
+        this.#principalContainer.appendChild(this.#mainContainer);
+
+        if (hash === "messagerie") {
+            if (!this.#user) return;
+            this.#mainContainer.innerHTML = ``;
+            messagesController.init(this.#user.data.data.id, this.#user.data.type);
+            return;
+        } 
+        if (hash === "exportateurs" || hash === "") {
+            this.#initCustomers(); // Charge les exportateurs
+            return;
+        }
+
+        if (hash === "profil") {
+            if (!this.#user) return;
+            this.#mainContainer.innerHTML = `<span><div class="loader-green"></div></span><p>Chargement du profil...</p>`;
+            await profileController.init(this.#user.data.data.id, this.#user.data.type);
+        }
+    }
+
+    // 🔁 Ajoute l’écoute de hashchange
+    #handleHashChangeEvent() {
+        window.addEventListener("hashchange", () => {
+            this.#navigateByHash();
         });
     }
 
     #initCustomers() {
         try {
+            this.#mainContainer.innerHTML = "<p>Chargement des exportateurs...</p>";
             const colRef = collection(firestore, "users");
             const q = query(colRef, where("type", "==", "--expo"));
 
@@ -70,25 +89,24 @@ class CooperativeController {
                 snapshot.forEach((doc) => {
                     customers.push({ id: doc.id, ...doc.data() });
                 });
-
                 this.#renderCustomersFromSnapshot(customers);
             });
         } catch (error) {
-            console.error("Error initializing customers:", error);
+            console.error("Erreur lors du chargement des exportateurs:", error);
         }
     }
 
     #renderCustomersFromSnapshot(customers) {
-        this.#mainContainer.innerHTML = "";
+        this.#mainContainer.innerHTML = "<h4>Exportateurs</h4>";
         const container = document.createElement('div');
         container.classList.add("cooperative-list");
 
         customers.forEach(customer => {
-            const nom = customer.data.nom?customer.data.nom : "" ;
-            const ville = customer.data.ville == "Inconnu" || ""? "" : customer.data.ville ;
-            const numero = customer.data.numero == "Inconnu" || ""? "": customer.data.numero;
-            const quartier = customer.data.quartier? customer.data.quartier: "";
-            const avenu = customer.data.avenu? customer.data.avenu: "";
+            const nom = customer.data.nom || "";
+            const ville = customer.data.ville && customer.data.ville !== "Inconnu" ? customer.data.ville : "";
+            const numero = customer.data.numero && customer.data.numero !== "Inconnu" ? customer.data.numero : "";
+            const quartier = customer.data.quartier || "";
+            const avenu = customer.data.avenu || "";
 
             const card = `
                 <div class="cooperative-card">
@@ -97,8 +115,8 @@ class CooperativeController {
                         <p>${ville}, ${quartier}, ${avenu}, ${numero}</p>
                     </div>
                     <div class="cooperative-stock">
-                        <strong>Stock :</strong>
-                        <span>1200 kg</span>
+                        <!--<strong>Degree de solvabilite :</strong>
+                        <span>1 semaine</span>-->
                     </div>
                 </div>
             `;
@@ -107,22 +125,7 @@ class CooperativeController {
 
         this.#mainContainer.appendChild(container);
     }
-
-    addCustomer(customer) {
-        this.customers.push(customer);
-    }
-
-    getCustomers() {
-        return this.customers;
-    }
-
-    findCustomerById(id) {
-        return this.customers.find(customer => customer.id === id);
-    }
-
-    removeCustomer(id) {
-        this.customers = this.customers.filter(customer => customer.id !== id);
-    }
 }
+
 
 export const cooperativeController = new CooperativeController(); 

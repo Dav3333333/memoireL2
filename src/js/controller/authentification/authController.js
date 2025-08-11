@@ -1,5 +1,5 @@
 import { createMapModal } from './mapModal.js';
-import { addDoc, collection , doc} from 'firebase/firestore';
+import { addDoc, collection , doc, serverTimestamp} from 'firebase/firestore';
 import { firestore } from '../../httplibs/firebaseconfig.js';
 import { authManager } from '../../httplibs/auth.js';
 
@@ -99,7 +99,9 @@ class Authcontroller {
                     geo_loc: data.geolocalisation ? {lat:parseFloat(data.geolocalisation.split(",")[0].trim()), long:parseFloat(data.geolocalisation.split(",")[1].trim())}: {lat:0, long:0},
                     num_impot:data.numero_impots, 
                     "numero_rccm":data.numero_rccm? data.numero_rccm:"", 
-                    "id_national":data.id_national?data.id_national:""
+                    "id_national":data.id_national?data.id_national:"",
+                    "stock_solde" : 0,
+                    "datecreation": serverTimestamp(),
                     };
     
                     this.saveCooperativeCountData(d, type)
@@ -108,18 +110,18 @@ class Authcontroller {
                         console.log("Coopérative enregistrée !");
                         window.removeEventListener("hashchange", this.onHashChange);
                         window.location.href = "index.html"; // Rediriger vers le tableau de bord ou une autre page
-                        } else {
+                        form.reset();
+                    } else {
                         console.log("Échec enregistrement.");
-                        }
-                    });
-                })
-                .catch((err) => {
-                    form.querySelector(".btn-sub").removeChild(loader)
-                    console.error("Erreur création utilisateur :", err);
+                    }
                 });
-    
-                // Réinitialiser le formulaire après soumission
-                form.reset();
+            })
+            .catch((err) => {
+                form.querySelector(".btn-sub").removeChild(loader)
+                console.error("Erreur création utilisateur :", err);
+            });
+            
+            // Réinitialiser le formulaire après soumission
             });
         } else if(window.location.hash == "#login"){
             const form = document.querySelector("#login-form");

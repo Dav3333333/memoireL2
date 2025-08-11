@@ -25,7 +25,9 @@
   background-size: 20% 100%;
   animation: l1 1s infinite linear;
   align-self: center;
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  justify-self: center;
   margin: 0 auto;
 }
 
