@@ -73,6 +73,7 @@ class App {
 
     checkAuth() {
         const userSession = checkAuth.check();
+        console.log(userSession);
         if (userSession.uid) {
             console.log("User is authenticated:", userSession);
             // Redirect to dashboard or main page
@@ -128,3 +129,4 @@ class App {
 const app = new App();
 
 app.init()
+
