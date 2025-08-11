@@ -23,7 +23,6 @@ class Authcontroller {
 
         this.#container.innerHTML = `
         <div class="auth-left">
-            <img src="/img/icon.png" alt="Cacao RDC Logo" />
             <h1>Cacao RDC</h1>
             <p>Créez votre compte pour participer à la révolution du cacao congolais</p>
         </div>
@@ -391,4 +390,5 @@ class Authcontroller {
 }
 
 export const authcontroller = new Authcontroller();
+
 authcontroller;
