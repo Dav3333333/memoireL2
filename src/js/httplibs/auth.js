@@ -114,7 +114,12 @@ class AuthManager {
             const userCredential = await createUserWithEmailAndPassword(this.#auth, email, password);
             const user = userCredential.user;
 
-            console.log(user)
+            console.log(user);
+
+            // Envoie l'email de vérification
+            await sendEmailVerification(user);
+
+            console.log("Email de vérification envoyé à:", email);
 
             // Enregistrer l'utilisateur dans localStorage
             localStorage.setItem("userSession", JSON.stringify(user));
@@ -159,3 +164,4 @@ class AuthManager {
 
 
 export const authManager = new AuthManager();
+
