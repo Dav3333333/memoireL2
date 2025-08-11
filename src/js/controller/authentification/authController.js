@@ -77,65 +77,49 @@ class Authcontroller {
     
                 // create the user
                 authManager.signUp(data.email, data.mot_de_passe)
-                .then(async (userCredential) => {
-                    const user = userCredential.user;
-
-                    if (!user) {
-                    console.error("Utilisateur non défini !");
-                    return;
-                    }
-
-                    // Envoie l'email de vérification
-                    await sendEmailVerification(user);
-
-                    alert("Un email de vérification a été envoyé à votre adresse. Veuillez vérifier votre email avant de continuer.");
-
-                    // Fonction pour vérifier périodiquement si email est vérifié
-                    const checkEmailVerified = () => {
-                    user.reload().then(() => {
-                        if (user.emailVerified) {
-                        // Email vérifié : on peut enregistrer les données
+                    .then((userCredential) => {
+                        const user = userCredential.user;
+        
+                        if (!user) {
+                        console.error("Utilisateur non défini !");
+                        return;
+                        }
+        
                         const idUser = user.uid;
-
+        
                         const d = {
-                            id: idUser,
-                            contact: { mail: data.email, phone: data.phone },
-                            nom: data.nom,
-                            ville: data.ville,
-                            quartier: data.quartier,
-                            avenu: data.avenu,
-                            numero: data.numero,
-                            geo_loc: data.geolocalisation ? { lat: parseFloat(data.geolocalisation.split(",")[0].trim()), long: parseFloat(data.geolocalisation.split(",")[1].trim()) } : { lat: 0, long: 0 },
-                            num_impot: data.numero_impots,
-                            numero_rccm: data.numero_rccm ? data.numero_rccm : "",
-                            id_national: data.id_national ? data.id_national : "",
-                            stock_solde: 0,
-                            datecreation: serverTimestamp(),
+                        id: idUser,
+                        contact:{"mail":data.email,"phone":data.phone},
+                        "nom":data.nom,
+                        "ville":data.ville,
+                        "quartier": data.quartier,
+                        "avenu":data.avenu,
+                        "numero": data.numero,
+                        geo_loc: data.geolocalisation ? {lat:parseFloat(data.geolocalisation.split(",")[0].trim()), long:parseFloat(data.geolocalisation.split(",")[1].trim())}: {lat:0, long:0},
+                        num_impot:data.numero_impots, 
+                        "numero_rccm":data.numero_rccm? data.numero_rccm:"", 
+                        "id_national":data.id_national?data.id_national:"",
+                        "stock_solde" : 0,
+                        "datecreation": serverTimestamp(),
                         };
-
-                        this.saveCooperativeCountData(d, type).then((success) => {
+        
+                        this.saveCooperativeCountData(d, type)
+                        .then((success) => {
                             if (success) {
                             console.log("Coopérative enregistrée !");
                             window.removeEventListener("hashchange", this.onHashChange);
-                            window.location.href = "index.html"; // Redirection après succès
-                            } else {
-                            console.log("Échec enregistrement.");
-                            }
-                        });
+                            window.location.href = "index.html"; // Rediriger vers le tableau de bord ou une autre page
+                            form.reset();
                         } else {
-                        // Pas encore vérifié, on rappelle dans 3s
-                        setTimeout(checkEmailVerified, 3000);
+                            console.log("Échec enregistrement.");
                         }
                     });
-                    };
-
-                    // Lancer la vérification périodique
-                    checkEmailVerified();
                 })
                 .catch((err) => {
-                    form.querySelector(".btn-sub").removeChild(loader);
+                    form.querySelector(".btn-sub").removeChild(loader)
                     console.error("Erreur création utilisateur :", err);
                 });
+            
             // Réinitialiser le formulaire après soumission
             });
         } else if(window.location.hash == "#login"){
