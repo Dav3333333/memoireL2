@@ -1,7 +1,7 @@
 import { createMapModal } from './mapModal.js';
 import { addDoc, collection , doc, serverTimestamp} from 'firebase/firestore';
 import { firestore } from '../../httplibs/firebaseconfig.js';
-import { authManager } from '../../httplibs/auth.js';
+import { authManager } from '../../httplibs/authApp.js';
 
 
 class Authcontroller {
@@ -58,69 +58,81 @@ class Authcontroller {
     handleFormSubmit() {
         const loader = document.createElement("div");
         loader.classList.add("loader");
-        if(window.location.hash == "#signup"){
 
+        if(window.location.hash == "#signup"){
             const form = this.#container.querySelector(".signup-form");
-            form.addEventListener("submit", (e) => {
-                form.querySelector(".btn-sub").appendChild(loader)
-                e.preventDefault(); // Empêche le rechargement de la page
-    
-                // Récupération des données du formulaire
-                const formData = new FormData(form);
+
+            // Retirer ancien listener (pour éviter doublons)
+            form.replaceWith(form.cloneNode(true)); 
+            const newForm = this.#container.querySelector(".signup-form");
+
+            newForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                newForm.querySelector(".btn-sub").appendChild(loader);
+
+                const formData = new FormData(newForm);
                 const data = Object.fromEntries(formData.entries());
-    
-                const type = form.querySelector(".type-count--btn.active").id;
-                
-    
-                // Ici, vous pouvez envoyer les données au serveur ou les traiter comme nécessaire
-                console.log("Données du formulaire :", data,formData);
-    
-                // create the user
-                authManager.signUp(data.email, data.mot_de_passe)
-                    .then((userCredential) => {
-                        const user = userCredential.user;
-        
-                        if (!user) {
-                        console.error("Utilisateur non défini !");
-                        return;
-                        }
-        
-                        const idUser = user.uid;
-        
-                        const d = {
-                        id: idUser,
-                        contact:{"mail":data.email,"phone":data.phone},
-                        "nom":data.nom,
-                        "ville":data.ville,
-                        "quartier": data.quartier,
-                        "avenu":data.avenu,
-                        "numero": data.numero,
-                        geo_loc: data.geolocalisation ? {lat:parseFloat(data.geolocalisation.split(",")[0].trim()), long:parseFloat(data.geolocalisation.split(",")[1].trim())}: {lat:0, long:0},
-                        num_impot:data.numero_impots, 
-                        "numero_rccm":data.numero_rccm? data.numero_rccm:"", 
-                        "id_national":data.id_national?data.id_national:"",
-                        "stock_solde" : 0,
-                        "datecreation": serverTimestamp(),
-                        };
-        
-                        this.saveCooperativeCountData(d, type)
-                        .then((success) => {
-                            if (success) {
-                            console.log("Coopérative enregistrée !");
-                            window.removeEventListener("hashchange", this.onHashChange);
-                            window.location.href = "index.html"; // Rediriger vers le tableau de bord ou une autre page
-                            form.reset();
+                const type = newForm.querySelector(".type-count--btn.active").id;
+
+                try {
+                    // 1. Création user + envoi email vérification
+                    const userCredential = await authManager.signUp(data.email, data.mot_de_passe);
+                    const user = userCredential.user;
+
+                    // 2. On remplace le formulaire par un message + bouton vérification email
+                    newForm.innerHTML = `
+                        <p>Un email de vérification a été envoyé à <b>${data.email}</b>. Merci de vérifier votre boîte mail.</p>
+                        <p>Après vérification, cliquez sur le bouton ci-dessous :</p>
+                        <button id="btnCheckVerification" type="button">J'ai vérifié mon email</button>
+                        <p id="verificationMessage"></p>
+                    `;
+
+                    const btnCheck = newForm.querySelector("#btnCheckVerification");
+                    const verificationMessage = newForm.querySelector("#verificationMessage");
+
+                    btnCheck.addEventListener("click", async () => {
+                        // Reload user to get fresh emailVerified status
+                        await user.reload();
+
+                        if (user.emailVerified) {
+                            verificationMessage.textContent = "Email vérifié ✅ Enregistrement des données...";
+
+                            const idUser = user.uid;
+                            const d = {
+                                id: idUser,
+                                contact: { mail: data.email, phone: data.phone },
+                                nom: data.nom,
+                                ville: data.ville,
+                                quartier: data.quartier,
+                                avenu: data.avenu,
+                                numero: data.numero,
+                                geo_loc: data.geolocalisation 
+                                    ? { lat: parseFloat(data.geolocalisation.split(",")[0].trim()), long: parseFloat(data.geolocalisation.split(",")[1].trim()) }
+                                    : { lat: 0, long: 0 },
+                                num_impot: data.numero_impots,
+                                numero_rccm: data.numero_rccm ? data.numero_rccm : "",
+                                id_national: data.id_national ? data.id_national : "",
+                                stock_solde: 0,
+                                datecreation: serverTimestamp(),
+                            };
+
+                            const saved = await this.saveCooperativeCountData(d, type);
+
+                            if (saved) {
+                                verificationMessage.textContent = "Coopérative enregistrée avec succès ! Redirection...";
+                                window.location.href = "index.html";
+                            } else {
+                                verificationMessage.textContent = "Erreur lors de l'enregistrement des données.";
+                            }
                         } else {
-                            console.log("Échec enregistrement.");
+                            verificationMessage.textContent = "Email non encore vérifié. Veuillez cliquer sur le lien dans votre mail.";
                         }
                     });
-                })
-                .catch((err) => {
-                    form.querySelector(".btn-sub").removeChild(loader)
+
+                } catch (err) {
+                    newForm.querySelector(".btn-sub").removeChild(loader);
                     console.error("Erreur création utilisateur :", err);
-                });
-            
-            // Réinitialiser le formulaire après soumission
+                }
             });
         } else if(window.location.hash == "#login"){
             const form = document.querySelector("#login-form");
