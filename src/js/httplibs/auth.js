@@ -1,5 +1,5 @@
 import { firestore, auth } from "./firebaseconfig";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, sendEmailVerification} from "firebase/auth";
 import { getDocs, query, collection, where, doc, updateDoc, serverTimestamp} from "firebase/firestore";
 
 
@@ -108,7 +108,6 @@ class AuthManager {
         }
     }
     
-    
     async signUp(email, password) {
         try {
             const userCredential = await createUserWithEmailAndPassword(this.#auth, email, password);
@@ -119,7 +118,7 @@ class AuthManager {
             // Envoie l'email de vérification
             await sendEmailVerification(user);
 
-            console.log("Email de vérification envoyé à:", email);
+            alert("Email de vérification envoyé à:", email);
 
             // Enregistrer l'utilisateur dans localStorage
             localStorage.setItem("userSession", JSON.stringify(user));
@@ -130,7 +129,6 @@ class AuthManager {
             throw error;
         }
     }
-
     
     async isConnected() {
         return new Promise((resolve, reject) => {
@@ -164,4 +162,3 @@ class AuthManager {
 
 
 export const authManager = new AuthManager();
-
