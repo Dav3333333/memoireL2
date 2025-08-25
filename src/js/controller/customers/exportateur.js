@@ -5,6 +5,7 @@ import { auth, firestore } from "../../httplibs/firebaseconfig";
 import { messagesController } from "./chat/messages";
 import { authManager } from "../../httplibs/authApp";
 import { profileController } from "./profil/profile";
+import { transporters } from "../transporter/transporter";
 
 
 class ExpotateurController {
@@ -47,6 +48,11 @@ class ExpotateurController {
                 if (!this.#user) return;
                 this.#principalContainer.innerHTML = "<p>Chargement du profil...</p>";
                 await profileController.init(this.#user.data.data.id, this.#user.data.type);
+            }
+
+            if (hash == "transporteurs") {
+                transporters.init();
+                return;
             }
         });
     }

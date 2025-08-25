@@ -25,6 +25,7 @@ class MenuController {
                     <!--<li><a class="menu-link active" id="dashboard" href="#dashboard">Dashboard</a></li>-->
                     <li><a class="menu-link active" id="cooperatives" href="#cooperatives">Coopératives</a></li>
                     <li><a class="menu-link" id="messagerie" href="#messagerie">Messagerie</a></li>
+                    <li><a class="menu-link" id="messagerie" href="#transporteurs">Transporteurs</a></li>
                     <li><a class="menu-link" id="profil" href="#profil">Profil</a></li>
                 </ul>
             </nav>
