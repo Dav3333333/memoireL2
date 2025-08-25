@@ -15,7 +15,7 @@ class Transporters {
                         <h3 class="cooperative-info__title">TMK</h3>
                     </div>
                     <div class="cooperative-stock">
-                        <span class="text-small text-thin">Contacts: +243 81 83 01 (tmk@tmkcongo.com)</span>
+                        <span class="text-small text-thin ">Contacts: +243 81 83 01 (tmk@tmkcongo.com)</span>
                     </div>
                 </div>
                 <div class="cooperative-card">
