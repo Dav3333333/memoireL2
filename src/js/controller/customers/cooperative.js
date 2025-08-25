@@ -10,6 +10,7 @@ import { messagesController } from "./chat/messages";
 import { authManager } from "../../httplibs/authApp";
 import { profileController } from "./profil/profile";
 import { transporters } from "../transporter/transporter";
+import { dashboardController } from "../dashbord/dashbord";
 
 
 /** * CooperativeController
@@ -33,7 +34,7 @@ class CooperativeController {
     async init() {
         try {
             // Force un hash par défaut si absent
-            window.location.hash = "exportateurs";
+            window.location.hash = "acceuil";
 
             this.#user = await authManager.getUserFirestore();
             this.#handleHashChangeEvent(); // Écouteur
@@ -73,6 +74,11 @@ class CooperativeController {
 
         if (hash == "transporteurs") {
             transporters.init();
+            return;
+        }
+
+        if (hash == "acceuil") {
+            dashboardController.init();
             return;
         }
     }

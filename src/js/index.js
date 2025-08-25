@@ -103,7 +103,6 @@ class App {
         };
 
         toggleBtn.addEventListener("click", () => {
-            console.log("clicked")
             sidebar.classList.toggle("active");
         });
 

@@ -22,10 +22,10 @@ class MenuController {
         const model = `
             <nav>
                 <ul>
-                    <!--<li><a class="menu-link active" id="dashboard" href="#dashboard">Dashboard</a></li>-->
+                    <li><a class="menu-link active" id="acceuil" href="#acceuil">Acceuil</a></li>
                     <li><a class="menu-link active" id="cooperatives" href="#cooperatives">Coopératives</a></li>
                     <li><a class="menu-link" id="messagerie" href="#messagerie">Messagerie</a></li>
-                    <li><a class="menu-link" id="messagerie" href="#transporteurs">Transporteurs</a></li>
+                    <li><a class="menu-link" id="transporteurs" href="#transporteurs">Transporteurs</a></li>
                     <li><a class="menu-link" id="profil" href="#profil">Profil</a></li>
                 </ul>
             </nav>
@@ -37,10 +37,10 @@ class MenuController {
         const model = `
             <nav>
                 <ul>
-                   <!-- <li><a class="menu-link active" id="Dashboard" href="#dashboard">Dashboard</a></li> -->
-                    <li><a class="menu-link active" id="exportateurs" href="#exportateurs">Exportateurs</a></li>
+                   <li><a class="menu-link active" id="acceuil" href="#acceuil">Acceuil</a></li>
+                    <li><a class="menu-link" id="exportateurs" href="#exportateurs">Exportateurs</a></li>
                     <li><a class="menu-link" id="messagerie" href="#messagerie">Messagerie</a></li>
-                    <li><a class="menu-link" id="messagerie" href="#transporteurs">Transporteurs</a></li>
+                    <li><a class="menu-link" id="transporteurs" href="#transporteurs">Transporteurs</a></li>
                     <li><a class="menu-link" id="profil" href="#profil">Profil</a></li>
                 </ul>
             </nav>

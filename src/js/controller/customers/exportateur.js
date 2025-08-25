@@ -6,6 +6,7 @@ import { messagesController } from "./chat/messages";
 import { authManager } from "../../httplibs/authApp";
 import { profileController } from "./profil/profile";
 import { transporters } from "../transporter/transporter";
+import { dashboardController } from "../dashbord/dashbord";
 
 
 class ExpotateurController {
@@ -18,7 +19,7 @@ class ExpotateurController {
         this.#principalContainer = document.querySelector("#main-content .content");
         this.#mainContainer = document.createElement("div");
 
-        window.location.hash = "cooperative"; // Set default hash to cooperative
+        window.location.hash = "acceuil"; // Set default hash to cooperative
 
         this.#user = null;
 
@@ -52,6 +53,11 @@ class ExpotateurController {
 
             if (hash == "transporteurs") {
                 transporters.init();
+                return;
+            }
+
+            if (hash == "acceuil") {
+                dashboardController.init();
                 return;
             }
         });
