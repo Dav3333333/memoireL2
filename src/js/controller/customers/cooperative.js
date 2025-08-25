@@ -71,7 +71,7 @@ class CooperativeController {
             await profileController.init(this.#user.data.data.id, this.#user.data.type);
         }
 
-        if (hash == "transporteurs"){
+        if (hash == "transporteurs") {
             transporters.init();
             return;
         }
