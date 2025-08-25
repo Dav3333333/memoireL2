@@ -1,0 +1,32 @@
+{
+  "name": "cacao",
+  "version": "1.0.0",
+  "description": "une application de information sur le cacao",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parcel src/index.html src/login.html",
+    "build": "parcel build src/index.html src/login.html --public-url ./"
+  }
+  ,
+  "keywords": [
+    "cacao",
+    "cacao",
+    "rdc",
+    "rdc",
+    "cacao",
+    "vente",
+    "cacao",
+    "cacao",
+    "vente",
+    "vente"
+  ],
+  "author": "davidlusenge",
+  "license": "ISC",
+  "dependencies": {
+    "firebase": "^12.0.0",
+    "parcel": "^2.15.4"
+  },
+  "devDependencies": {
+    "buffer": "^6.0.3"
+  }
+}

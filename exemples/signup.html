@@ -1,0 +1,128 @@
+<div class="auth-container">
+  <div class="auth-left">
+    <img src="/img/icon.png" alt="Cacao RDC Logo" />
+    <h1>Cacao RDC</h1>
+    <p>Créez votre compte pour participer à la révolution du cacao congolais</p>
+  </div>
+
+  <div class="auth-right">
+    <form class="signup-form" action="/inscription" method="POST">
+      <h2>Créer un compte</h2>
+      <div class="form-group">
+        <label for="org-name">Nom de l'organisation</label>
+        <input type="text" id="org-name" name="organisation" placeholder="Nom de l'organisation" required />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Adresse email</label>
+        <input type="email" id="email" name="email" placeholder="Adresse email" required />
+      </div>
+
+      <div class="form-group">
+        <label for="adresse">Adresse physique</label>
+        <input type="text" id="adresse" name="adresse" placeholder="Adresse physique" required />
+      </div>
+
+      <div class="form-group">
+        <label for="geoloc">Géolocalisation</label>
+        <input type="text" id="geoloc" name="geolocalisation" placeholder="Géolocalisation" />
+        <button type="button" onclick="getLocation()">📍</button>
+      </div>
+
+      <div class="form-group">
+        <label for="num-impots">Numéro d’impôts</label>
+        <input type="text" id="num-impots" name="numero_impots" placeholder="Numéro d’impôts" required />
+      </div>
+
+      <div class="form-group">
+        <label for="tel-principal">Téléphone principal</label>
+        <input type="tel" id="tel-principal" name="telephone_principal" placeholder="Téléphone principal" required />
+      </div>
+
+      <div class="form-group">
+        <label for="autres-contacts">Autres contacts (optionnel)</label>
+        <input type="text" id="autres-contacts" name="autres_contacts" placeholder="Autres contacts" />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input type="password" id="password" name="mot_de_passe" placeholder="Mot de passe" required />
+      </div>
+
+      <div class="form-group">
+        <label for="confirm-password">Confirmer le mot de passe</label>
+        <input type="password" id="confirm-password" name="confirmation_mot_de_passe" placeholder="Confirmer le mot de passe" required />
+      </div>
+
+      <button type="submit">Créer un compte</button>
+
+      <div class="switch-link">
+        Déjà un compte ? <a href="login.html">Se connecter</a>
+      </div>
+  </form>
+
+  </div>
+</div>
+
+
+<!-- exporter sign up code -->
+<div class="form-fields">
+  <h2>Créer un compte</h2>
+  <div class="form-group">
+    <label for="org-name">Nom de l'organisation</label>
+    <input type="text" id="org-name" name="organisation" placeholder="Nom de l'organisation" required />
+  </div>
+
+  <div class="form-group">
+    <label for="email">Adresse email</label>
+    <input type="email" id="email" name="email" placeholder="Adresse email" required />
+  </div>
+
+  <div class="form-group">
+    <label for="tel-principal">Téléphone principal</label>
+    <input type="tel" id="tel-principal" name="telephone_principal" placeholder="Téléphone principal" required />
+  </div>
+
+  <div class="form-group">
+    <label for="adresse">Adresse physique</label>
+    <label for="ville">Ville</label>
+    <input type="text" id="ville" name="vile" placeholder="Ville/Territoire" required />
+
+    <label for="Quartier">Quartier</label>
+    <input type="text" id="Quartier" name="Quartier" placeholder="Quartier" required />
+
+    <label for="Avenue">Avenu</label>
+    <input type="text" id="Avenue" name="Avenue" placeholder="Avenue" required />
+
+    <label for="Numéro">Numéro</label>
+    <input type="text" id="Numéro" name="Numéro" placeholder="Ex: 12" required />
+
+  </div>
+
+  <div class="form-group">
+    <label for="geoloc">Géolocalisation</label>
+    <input type="text" id="geoloc" name="geolocalisation" placeholder="Géolocalisation" />
+    <button type="button" onclick="getLocation()">📍</button>
+  </div>
+
+  <div class="form-group">
+    <label for="num-impots">Numéro d’impôts</label>
+    <input type="text" id="num-impots" name="numero_impots" placeholder="Numéro d’impôts" required />
+  </div>
+
+  <div class="form-group">
+    <label for="password">Mot de passe</label>
+    <input type="password" id="password" name="mot_de_passe" placeholder="Mot de passe" required />
+  </div>
+
+  <div class="form-group">
+    <label for="confirm-password">Confirmer le mot de passe</label>
+    <input type="password" id="confirm-password" name="confirmation_mot_de_passe" placeholder="Confirmer le mot de passe" required />
+  </div>
+
+  <button type="submit" class="btn-sub">Créer un compte</button>
+
+  <div class="switch-link">
+    Déjà un compte ? <a href="#">Se connecter</a>
+  </div>
+</div>

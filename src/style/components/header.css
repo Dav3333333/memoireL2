@@ -1,0 +1,121 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--header-bg);
+  padding: 1rem 2rem;
+  color: var(--text-color);
+  box-shadow: var(--shadow-md);
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  flex-wrap: wrap;
+}
+
+/* Partie gauche */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-left img.logo {
+  width: 42px;
+  height: 42px;
+}
+
+.header-left h1 {
+  font-size: 1.4rem;
+  margin: 0;
+  color: var(--text-color);
+}
+
+/* Partie droite */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-right .price {
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+/* Bouton login */
+.btn-login {
+  background-color: var(--accent-color);
+  color: #2b2b2b;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-login:hover {
+  background-color: #c89a77;
+}
+
+/* Profil */
+.profile-pic {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid white;
+  cursor: pointer;
+}
+
+/* Par défaut : bouton caché */
+.toggle-menu {
+  display: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.4rem;
+  padding: 0.3rem 0.6rem;
+  color: white;
+  border-radius: var(--border-radius);
+  transition: background-color 0.2s ease;
+
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.active {
+  background-color: white;
+  color: var(--secondary-color);
+}
+
+.toggle-menu:hover {
+  background-color: var(--secondary-color);
+}
+
+/* Visible uniquement sur écran ≤768px */
+@media (max-width: 768px) {
+  .toggle-menu {
+    display: inline-block;
+  }
+
+  .header{
+    padding: 0.5rem 1rem;
+  }
+
+  .header-left h1{
+    font-size: 1rem;
+  }
+}
+
+@media screen and (max-width:530px) {
+  .price{
+    display: none;
+  }
+}
+

@@ -1,0 +1,206 @@
+.auth-container {
+  display: flex;
+  height: 100vh;
+  background-color: var(--bg-light);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.auth-left {
+  flex: 1;
+  background-color: var(--primary-color);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+  text-align: center;
+}
+
+.auth-left img {
+  width: 100px;
+  margin-bottom: 1rem;
+}
+
+.auth-left h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.auth-left p {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.auth-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  background-color: white;
+  padding: 3rem;
+  overflow: auto;
+}
+
+.auth-form {
+  width: 100%;
+  max-width: 400px;
+}
+
+.auth-form h2 {
+  color: var(--text-dark);
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  color: var(--text-dark);
+  background-color: white;
+}
+
+.auth-form button {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.auth-form button:hover {
+  background-color: #238c43;
+}
+
+.auth-form .switch-link {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.auth-form .switch-link a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.auth-form button[type="button"] {
+  background-color: #e0e0e0;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.auth-form button[type="button"]:hover {
+  background-color: #d4d4d4;
+}
+
+/* STYLE SPÉCIFIQUE AU FORMULAIRE DE CRÉATION DE COMPTE */
+.signup-form {
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+.signup-form h2 {
+  color: var(--text-dark);
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+.signup-form .type-count--btn{
+  background-color: var(--bg-color);
+  color: var(--text-dark);
+}
+
+.signup-form .type-count .container-btn{
+  display: flex;
+  justify-content: space-between;
+}
+
+.signup-form .type-count--btn.active{
+  color: var(--text-color);
+  background-color: var(--secondary-color);
+}
+
+.signup-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.signup-form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-dark);
+}
+
+.signup-form input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  color: var(--text-dark);
+  background-color: white;
+}
+
+.signup-form button {
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 1rem;
+}
+
+.signup-form button[type="submit"] {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.signup-form button:hover {
+  background-color: #238c43;
+}
+
+.signup-form .switch-link {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.signup-form .switch-link a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+
+@media (max-width: 768px) {
+  .auth-container {
+    flex-direction: column;
+  }
+
+  .auth-left, .auth-right {
+    flex: none;
+    width: 100%;
+    padding: 2rem;
+  }
+
+  /* .auth-left {
+    order: 2;
+  }
+
+  .auth-right {
+    order: 1;
+  } */
+}

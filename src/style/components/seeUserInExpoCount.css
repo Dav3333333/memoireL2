@@ -1,0 +1,39 @@
+.coop-view-container {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: var(--shadow-soft, 0 2px 8px rgba(0,0,0,0.05));
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.coop-view-header {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 1rem;
+}
+
+.coop-tab-btn {
+  background: transparent;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  border-bottom: 2px solid transparent;
+  color: var(--text-dark, #333);
+  transition: 0.2s;
+}
+
+.coop-tab-btn:hover {
+  color: var(--primary-color, #007BFF);
+}
+
+.coop-tab-btn--active {
+  border-color: var(--primary-color, #007BFF);
+  color: var(--primary-color, #007BFF);
+}
+
+.coop-detail {
+  line-height: 1.5;
+  font-size: 16px;
+}

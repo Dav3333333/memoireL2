@@ -1,0 +1,35 @@
+:root {
+  /* Couleurs principales */
+  --primary-color: #2e7d32; /* Vert pro */
+  /* --secondary-color: #dcedc8; */
+  /* --primary-color: #2E7D32;           */
+  --secondary-color: #4A2C18;        
+  --accent-color: #D9B08C;           /* Beige doré */
+
+  --bg-color: #f3fef3;               /* Vert pâle en fond */
+  --header-bg: #2E7D32;
+  --text-color: #ffffff;
+  --muted-text-color: #cccccc;
+
+  --bg-light: #f4f6f5;
+  --text-dark: #222;
+
+  --border-radius: 8px;
+  --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+  
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+dialog{
+    border: none;
+    border-radius: 8px;
+    align-self: center;
+    justify-self: center;
+}

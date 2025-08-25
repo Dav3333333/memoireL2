@@ -1,0 +1,54 @@
+.cooperative-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+}
+
+.cooperative-card {
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-light);
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  transition: transform 0.3s ease;
+}
+
+.cooperative-card:hover {
+  transform: scale(1.01);
+}
+
+.cooperative-image img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid var(--primary-color);
+  margin-right: 20px;
+}
+
+.cooperative-info {
+  flex: 1;
+  color: var(--text-color);
+}
+
+.cooperative-info h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.cooperative-info p {
+  margin: 5px 0 0;
+  color: #777;
+  font-size: 14px;
+}
+
+.cooperative-stock {
+  text-align: right;
+  color: var(--primary-color);
+  font-size: 16px;
+  font-weight: bold;
+}
