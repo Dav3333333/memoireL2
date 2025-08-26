@@ -39,14 +39,22 @@ class DashboardChart {
     // Charts
     this.barChart = null;
     this.doughnutChart = null;
+
+    // unsubscribe listener firestore
+    this.unsubscribe = null;
   }
 
   initRealtimeListener() {
     try {
       const colRef = collection(firestore, "users");
 
-      onSnapshot(colRef, (snapshot) => {
-        // Reset les tableaux pour éviter les doublons
+      // Si un ancien listener existe → on l’arrête
+      if (this.unsubscribe) {
+        this.unsubscribe();
+      }
+
+      this.unsubscribe = onSnapshot(colRef, (snapshot) => {
+        // Reset les tableaux à chaque update
         this.cooperatives = [];
         this.quantites = [];
         this.demandes = [];
@@ -56,16 +64,12 @@ class DashboardChart {
 
           if (data.type === "--coope") {
             this.cooperatives.push(data.data.nom || "Sans nom");
-            this.quantites.push(data.data.stock_solde);
-          }
-
-
-          if (data.data.demande) {
-            this.demandes.push(data.data.demande);
+            this.quantites.push(data.data.stock_solde || 0);
+            this.demandes.push(data.data.demande || 0);
           }
         });
 
-        // Une fois les données récupérées → mettre à jour les graphiques
+        // Mettre à jour les graphiques
         this.updateCharts();
       });
     } catch (error) {
@@ -81,12 +85,10 @@ class DashboardChart {
     const barCtx = document.getElementById(this.barCanvasId);
     if (barCtx) {
       if (this.barChart) {
-        // Update
         this.barChart.data.labels = this.cooperatives;
         this.barChart.data.datasets[0].data = this.quantites;
         this.barChart.update();
       } else {
-        // Create
         this.barChart = new Chart(barCtx, {
           type: "bar",
           data: {
@@ -99,6 +101,7 @@ class DashboardChart {
           },
           options: {
             responsive: true,
+            maintainAspectRatio: false,
             scales: { y: { beginAtZero: true } }
           }
         });
@@ -121,22 +124,47 @@ class DashboardChart {
               backgroundColor: ["#2196f3", "#ff5722"]
             }]
           },
-          options: { responsive: true }
+          options: {
+            responsive: true,
+            maintainAspectRatio: false
+          }
         });
       }
     }
   }
 
-  render() {
+async render() {
+    const coopCanvas = document.getElementById(this.barCanvasId);
+    const demandCanvas = document.getElementById(this.doughnutCanvasId);
+
+    if (!coopCanvas || !demandCanvas) {
+        console.warn("Les canvas ne sont pas encore prêts !");
+        return;
+    }
+
+    // Nettoyer d’éventuels anciens graphiques/listeners
+    this.destroy();
+
+    // Lancer l'écoute temps réel et initialiser les graphiques
     this.initRealtimeListener();
+}
+
+
+  // Détruire les anciens graphiques (utile si tu quittes le dashboard)
+  destroy() {
+    if (this.barChart) {
+      this.barChart.destroy();
+      this.barChart = null;
+    }
+    if (this.doughnutChart) {
+      this.doughnutChart.destroy();
+      this.doughnutChart = null;
+    }
+    if (this.unsubscribe) {
+      this.unsubscribe();
+      this.unsubscribe = null;
+    }
   }
 }
 
-let dynamicChart = null;
-
-window.addEventListener("DOMContentLoaded", () => {
-  dynamicChart = new DashboardChart("coopChart", "demandChart");
-  dynamicChart.render();
-});
-
-export { dynamicChart };
+export const dynamicChart = new DashboardChart("coopChart", "demandChart");

@@ -5,14 +5,19 @@ class DashboardController {
 
     constructor() {
         this.#principalContainer = document.querySelector("#main-content .content");
-        this.#principalContainer.innerHTML = `<span><div class="loader-green"></div></span>
-        `;
-        
     }
 
-    init() {
+    async init() {
+        // Affichage loader
+        this.#principalContainer.innerHTML = `<span><div class="loader-green"></div></span>`;
+
+        // Render dashboard
         this.render();
-        dynamicChart.render();
+
+        // 🔑 attendre le prochain cycle de rendu du navigateur
+        requestAnimationFrame(async () => {
+            await dynamicChart.render();
+        });
     }
 
     render() {

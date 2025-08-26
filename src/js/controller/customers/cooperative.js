@@ -78,7 +78,7 @@ class CooperativeController {
         }
 
         if (hash == "acceuil") {
-            dashboardController.init();
+            await dashboardController.init();
             return;
         }
     }
