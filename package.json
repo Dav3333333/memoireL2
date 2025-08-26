@@ -6,8 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel src/index.html src/login.html",
     "build": "parcel build src/index.html src/login.html --public-url ./"
-  }
-  ,
+  },
   "keywords": [
     "cacao",
     "cacao",
@@ -23,6 +22,7 @@
   "author": "davidlusenge",
   "license": "ISC",
   "dependencies": {
+    "chart.js": "^4.5.0",
     "firebase": "^12.0.0",
     "parcel": "^2.15.4"
   },
