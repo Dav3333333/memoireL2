@@ -26,6 +26,12 @@
   color: white;
 }
 
+.btn-center-bothside{
+  display: flex;
+  justify-content: center;
+  margin-top: 1em;
+}
+
 .btn-secondary:hover {
   background-color: #6b4f3b;
   transform: translateY(-2px);

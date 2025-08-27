@@ -33,6 +33,11 @@
   color: var(--text-dark);
 }
 
+.dashboard h3{
+  margin-bottom: 0.5rem;
+  color: var(--text-dark);
+}
+
 .dashboard-section p,
 .dashboard-section ul {
   margin: 0;

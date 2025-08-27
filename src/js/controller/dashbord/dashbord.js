@@ -20,6 +20,25 @@ class DashboardController {
         });
     }
 
+    async initilizeInComponent(htmlElement) {
+        htmlElement.innerHTML = `
+        <div class="dashboard">
+            <div class="card">
+                <h3 color="green">Quantités disponibles (par coopérative)</h3>
+                <canvas id="coopChart"></canvas>
+            </div>
+
+            <div class="card">
+                <h3 class="text">Total Demande vs Disponibilité</h3>
+                <canvas id="demandChart"></canvas>
+            </div>
+        </div>
+        `;
+        requestAnimationFrame(async () => {
+            await dynamicChart.render();
+        });
+    }
+
     render() {
         this.#principalContainer.innerHTML = `
         <div class="dashboard">

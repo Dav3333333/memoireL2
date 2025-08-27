@@ -1,5 +1,6 @@
 import { firestore } from '../../httplibs/firebaseconfig';
 import { collection, onSnapshot } from 'firebase/firestore';
+import { checkAuth } from '../authentification/checkauth';
 
 // IMPORT CHARTJS
 import {
@@ -59,13 +60,21 @@ class DashboardChart {
         this.quantites = [];
         this.demandes = [];
 
+        const user = checkAuth.check();
+
         snapshot.forEach((doc) => {
           const data = doc.data();
 
           if (data.type === "--coope") {
-            this.cooperatives.push(data.data.nom || "Sans nom");
-            this.quantites.push(data.data.stock_solde || 0);
-            this.demandes.push(data.data.demande || 0);
+            if(!user){
+              this.cooperatives.push("Cooperative");
+              this.quantites.push(data.data.stock_solde || 0);
+              this.demandes.push(data.data.demande || 0);
+            }else{
+              this.cooperatives.push(data.data.nom || "Sans nom");
+              this.quantites.push(data.data.stock_solde || 0);
+              this.demandes.push(data.data.demande || 0);
+            }
           }
         });
 

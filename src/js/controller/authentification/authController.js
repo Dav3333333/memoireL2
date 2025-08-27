@@ -9,8 +9,7 @@ class Authcontroller {
     #dialog;
     constructor() {
         if(authManager.getUserSession()){
-            console.log(authManager.getUserSession());
-            window.location.href = "index.html";
+            window.location.href = "home.html";
             return;
         }
 
