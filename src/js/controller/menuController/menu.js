@@ -22,7 +22,7 @@ class MenuController {
         const model = `
             <nav>
                 <ul>
-                    <li><a class="menu-link active" id="acceuil" href="#acceuil">Acceuil</a></li>
+                    <li><a class="menu-link active" id="dashbord" href="#dashbord">Tableau de bord</a></li>
                     <li><a class="menu-link" id="cooperatives" href="#cooperatives">Coopératives</a></li>
                     <li><a class="menu-link" id="messagerie" href="#messagerie">Messagerie</a></li>
                     <li><a class="menu-link" id="transporteurs" href="#transporteurs">Transporteurs</a></li>
@@ -37,7 +37,7 @@ class MenuController {
         const model = `
             <nav>
                 <ul>
-                   <li><a class="menu-link active" id="acceuil" href="#acceuil">Acceuil</a></li>
+                   <li><a class="menu-link active" id="dashbord" href="#dashbord">Tableau de bord</a></li>
                     <li><a class="menu-link" id="exportateurs" href="#exportateurs">Exportateurs</a></li>
                     <li><a class="menu-link" id="messagerie" href="#messagerie">Messagerie</a></li>
                     <li><a class="menu-link" id="transporteurs" href="#transporteurs">Transporteurs</a></li>

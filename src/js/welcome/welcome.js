@@ -10,7 +10,6 @@ class WelcomeController {
             return;
         }
 
-        window.location.hash = "#signup";
         
         this.#dialog = document.querySelector("dialog");
 

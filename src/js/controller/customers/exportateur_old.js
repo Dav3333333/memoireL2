@@ -10,7 +10,7 @@ class ExpotateurController{
     constructor() {
         this.#principalContainer = document.querySelector("#main-content .content");
         this.#mainContainer = document.createElement("div"); 
-        window.location.hash = "cooperative"; // Set default hash to cooperative
+        window.location.hash = "dashbord"; // Set default hash to cooperative
 
         this.#handleHashChangeEvent();
     }

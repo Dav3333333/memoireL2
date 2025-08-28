@@ -34,7 +34,7 @@ class CooperativeController {
     async init() {
         try {
             // Force un hash par défaut si absent
-            window.location.hash = "acceuil";
+            window.location.hash = "dashbord";
 
             this.#user = await authManager.getUserFirestore();
             this.#handleHashChangeEvent(); // Écouteur
@@ -77,7 +77,7 @@ class CooperativeController {
             return;
         }
 
-        if (hash == "acceuil") {
+        if (hash == "dashbord") {
             await dashboardController.init();
             return;
         }
