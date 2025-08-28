@@ -1,0 +1,56 @@
+
+.welcome{
+    display: flex;
+    flex-direction: column;
+    grid-area: 4rem;
+    justify-content: center;
+}
+
+.welcome .btns-signin{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: space-between;
+}
+
+.btns-signin .button-container{
+    justify-content: center;
+    align-items: center;
+}
+
+.btns-signin .button-container img{
+    max-width: 16rem;
+    height: 16rem;
+}
+
+.auth-right .welcome .info{
+    margin-top: 2rem;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var(--secondary-color);
+}
+
+@media screen  and (max-width:1340px){
+    .btns-signin .button-container img{
+        max-width: 12rem;
+        height: 12rem;
+    }
+}
+
+@media screen and (max-width:1050px) {
+    .btns-signin .button-container img{
+        max-width: 8rem;
+        height: 8rem;
+    }
+}
+
+@media screen and (max-width:870px) {
+    .btns-signin .button-container img{
+        max-width: 6rem;
+        height: 6rem;
+    }
+    .welcome .btns-signin{
+        flex-direction: column;
+    }
+}

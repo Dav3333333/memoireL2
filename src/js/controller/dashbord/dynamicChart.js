@@ -75,6 +75,12 @@ class DashboardChart {
               this.quantites.push(data.data.stock_solde || 0);
               this.demandes.push(data.data.demande || 0);
             }
+          }else if(data.type === "--expo"){
+            if(!user){
+              this.demandes.push(data.data.demande || 0);
+            }else{
+              this.demandes.push(data.data.demande || 0);
+            }
           }
         });
 
@@ -127,7 +133,7 @@ class DashboardChart {
         this.doughnutChart = new Chart(doughnutCtx, {
           type: "doughnut",
           data: {
-            labels: ["Disponibilité", "Demande"],
+            labels: [`Disponibilité ${totalDispo}`, `Demande ${totalDemande}`],
             datasets: [{
               data: [totalDispo, totalDemande],
               backgroundColor: ["#2196f3", "#ff5722"]

@@ -11,7 +11,7 @@ class CheckAuth {
 
     deconect(){
         localStorage.removeItem("userSession");
-        window.location.href = "login.html"; // Redirect to login page
+        window.location.href = ""; // Redirect to login page
     }
 
     async isAuthenticated() {

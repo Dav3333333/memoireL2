@@ -4,11 +4,12 @@ import {
     collection,
     onSnapshot,
     query,
-    where,
-    addDoc,
-    serverTimestamp,
-    orderBy
+    where, 
+    doc, 
+    getDocs, 
+    updateDoc
 } from "firebase/firestore";
+
 
 import { authManager } from "../../../httplibs/authApp";
 
@@ -19,6 +20,7 @@ class ProfileController {
     #typeUser;
     #mainContainer;
     #principalContainer;
+    #dialog;
 
     constructor() {
         this.#idCurrentUser = null;
@@ -28,6 +30,8 @@ class ProfileController {
         this.#mainContainer = document.createElement("div");
         this.#principalContainer.innerHTML = `<span><div class="loader-green"></div></span>`;
         this.#principalContainer.appendChild(this.#mainContainer);
+
+        this.#dialog = document.querySelector("dialog");
     }
 
     async init(idCurrentUser, typeUser) {
@@ -38,33 +42,93 @@ class ProfileController {
         if (!user) return;
         this.#renderProfile(user);
 
-        document.querySelector(".btn-deconnect").addEventListener("click", () => {
-            checkAuth.deconect();
+        this.handleClickEvent();
+    }
+
+    async updatdeQuantieDispoDemande(newValue) {
+        const collRef = collection(firestore, "users");
+        const q = query(collRef, where("data.id", "==", this.#idCurrentUser));
+
+        let data = null;
+        if (this.#typeUser === "--coope") {
+            data = { "data.stock_solde": newValue };
+        } else {
+            data = { "data.demande": newValue };
+        }
+
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+            querySnapshot.forEach(async (document) => {
+                const docRef = doc(firestore, "users", document.id);
+                await updateDoc(docRef, data);
+                console.log("Document successfully updated!");
+            });
+        } else {
+            console.log("Aucun document trouvé pour cet id utilisateur");
+        }
+    }
+
+    onpenDialogFormSetQuanditeDispoDemande (){
+        if (!this.#dialog) return;
+
+        const type = this.#typeUser === "--coope" ? "quantité disponible" : "demande";
+        const label = this.#typeUser === "--coope" ? "Quantité disponible (en kg)" : "Demande (en kg)";
+
+        const model = `
+            
+                <form method="dialog" class="form dialog-form signup-form">
+                    <h3>Modifier la ${type} de cacao</h3>
+                    <label for="input-${type.replace(" ", "-")}">${label}:</label>
+                    <input type="number" id="input-${type.replace(" ", "-")}" name="input-${type.replace(" ", "-")}" required min="0" step="0.01">
+                    <div class="dialog-actions form-group">
+                        <button type="submit" class="btn btn-primary btn-success">Enregistrer</button>
+                        <button type="button" class="btn btn-danger">Annuler</button>
+                    </div>
+                </form>
+        `;
+
+        this.#dialog.innerHTML = model;
+        this.#dialog.showModal();
+
+        const form = this.#dialog.querySelector("form");
+        const btnCancel = this.#dialog.querySelector(".btn-danger");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const inputValue = parseFloat(form[`input-${type.replace(" ", "-")}`].value);
+            if (isNaN(inputValue) || inputValue < 0) {
+                alert("Veuillez entrer une valeur valide.");
+                return;
+            }
+            await this.updatdeQuantieDispoDemande(inputValue);
+            this.#dialog.close();
+        });
+
+        btnCancel.addEventListener("click", () => {
+            this.#dialog.close();
         });
     }
 
-    async #loadDiscussions() {
-        if (!this.#typeUser) return;
+    handleClickEvent (){
+        const divUser = document.querySelector("#user-profile");
+        
+        if (!divUser) return;
 
-        const searchedType = this.#typeUser === "--coope" ? "--expo"
-            : this.#typeUser === "--expo" ? "--coope"
-            : null;
-        if (!searchedType) return;
+        divUser.addEventListener("click", (e) => {
+            const target = e.target;
 
-        try {
-            const usersRef = collection(firestore, "users");
-            const q = query(usersRef, where("type", "==", searchedType));
-            onSnapshot(q, (snapshot) => {
-                const users = snapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
-                console.log(users);
-                this.#renderProfile(users);
-            });
-        } catch (error) {
-            console.error("Erreur lors du chargement des discussions :", error);
-        }
+            if (target.id === "btn-update-quant-dispo" || target.id === "btn-update-demande") {
+                this.onpenDialogFormSetQuanditeDispoDemande();
+                return;
+            }
+
+            if (target.classList.contains("btn-deconnect")) {
+                checkAuth.deconect();
+                return;
+            }
+        });
+
     }
 
     #renderProfile(user) {
@@ -138,8 +202,8 @@ class ProfileController {
 
                 <div class="actions">
                     <!--<button id="btn-modifier-profil" class="btn btn-secondary">Modifier le profil</button>-->
-                    <button id="btn-deconnexion" class="btn btn-login btn-deconnect">Déconnexion</button>
-                    <button id="btn-update-${customer.type == "--coope"?"quant-dispo": "demande"}" class="btn btn-login btn-deconnect">Modifier ${customer.type == "--coope" ? "La quantie dispobile": "La demande" }</button>
+                    <button id="btn-deconnexion" class="btn btn-deconnect btn-danger">Déconnexion</button>
+                    <button id="btn-update-${customer.type == "--coope"?"quant-dispo": "demande"}" class="btn btn-success">Modifier ${customer.type == "--coope" ? "La quantie dispobile": "La demande" } du Cacao</button>
                 </div>
             </div>
         `;

@@ -16,6 +16,9 @@
 
   --border-radius: 8px;
   --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.2);
+
+  --danger-color: #d32f2f; /* Rouge pour les erreurs */
+  --success-color: #388e3c; /* Vert pour les succès */
 }
 
 
