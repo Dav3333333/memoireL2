@@ -32,6 +32,11 @@ class ExpotateurController {
         window.addEventListener("hashchange", async (e) => {
             const hash = window.location.hash.replace("#", "");
 
+            if (hash == "dashbord") {
+                dashboardController.init();
+                return;
+            }
+
             if (hash == "cooperatives") {
                 this.#initCooperatives();
                 return;
@@ -53,11 +58,6 @@ class ExpotateurController {
 
             if (hash == "transporteurs") {
                 transporters.init();
-                return;
-            }
-
-            if (hash == "dashbord") {
-                dashboardController.init();
                 return;
             }
         });

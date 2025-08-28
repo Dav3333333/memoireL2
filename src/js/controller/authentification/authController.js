@@ -3,6 +3,8 @@ import { addDoc, collection , doc, serverTimestamp} from 'firebase/firestore';
 import { firestore } from '../../httplibs/firebaseconfig.js';
 import { authManager } from '../../httplibs/authApp.js';
 
+import { dashboardController } from '../dashbord/dashbord.js';
+
 
 class Authcontroller {
     #container;
@@ -22,8 +24,16 @@ class Authcontroller {
 
         this.#container.innerHTML = `
         <div class="auth-left">
-            <h1>Cacao RDC</h1>
-            <p>Créez votre compte pour participer à la révolution du cacao congolais</p>
+            <h1> Bienvenue sur <span>Cacao Connect RDC</span> </h1>
+            <p> La plateforme de gestion et d'information sur le cacao </p>
+
+            <!-- dashbord -->
+            <div class="container-dashbord">
+            </div>
+
+            <div>
+                <div class="price mercurial">Prix directeur : <strong><div class="loader"></div></strong><span>$/Kg</span></div>
+            </div>
         </div>
 
         <div class="auth-right">
@@ -33,6 +43,7 @@ class Authcontroller {
         this.handleLoginSignUpMode();
         this.handleClickEvent();
         this.handleFormSubmit();
+        dashboardController.initilizeInComponent(this.#container.querySelector(".container-dashbord"));
         document.querySelector("div").appendChild(this.#container);
     }
 

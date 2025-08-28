@@ -69,6 +69,7 @@
   border: none;
   border-radius: var(--border-radius);
   cursor: pointer;
+  margin: 1rem;
 }
 
 .btn-primary:hover {

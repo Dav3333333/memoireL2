@@ -105,17 +105,24 @@
   }
 
   .header{
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.1rem 0.5rem 0.1rem;
   }
 
   .header-left h1{
-    font-size: 1rem;
+    font-size: 0.8rem;
   }
 }
 
 @media screen and (max-width:530px) {
   .price{
     display: absolute;
+  }
+  .price.mercurial{
+    font-size: 0.4rem;
+  }
+
+  .header-left h1{
+    font-size: 0.6rem;
   }
 }
 
