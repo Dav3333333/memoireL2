@@ -41,7 +41,8 @@ class WelcomeController {
                     <p> Pour acheter ou vendre le cacao, vous devez d'abord vous connecter ou créer un compte si vous n'en avez pas. </p>
                     <p> Cliquez sur le bouton ci-dessous pour commencer. </p>
                 </section>
-                <button class="btn btn-secondary btn-center-bothside" id="btn-signin"> Acheter/Vendre le Cacao Ici </button>
+                <button class="btn btn-secondary btn-center-bothside" id="btn-signin"> Acheter Ici</button> 
+                <button class="btn btn-secondary btn-center-bothside" id="btn-signin"> Vendre Ici</button>
             </div> 
         `;
         right.addEventListener("click", (e) => {

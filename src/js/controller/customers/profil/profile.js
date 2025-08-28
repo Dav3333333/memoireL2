@@ -139,6 +139,7 @@ class ProfileController {
                 <div class="actions">
                     <!--<button id="btn-modifier-profil" class="btn btn-secondary">Modifier le profil</button>-->
                     <button id="btn-deconnexion" class="btn btn-login btn-deconnect">Déconnexion</button>
+                    <button id="btn-update-${customer.type == "--coope"?"quant-dispo": "demande"}" class="btn btn-login btn-deconnect">Modifier ${customer.type == "--coope" ? "La quantie dispobile": "La demande" }</button>
                 </div>
             </div>
         `;
