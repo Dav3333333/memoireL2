@@ -110,6 +110,67 @@ class ProfileController {
         });
     }
 
+    updateMercurialPrice(newMinPrice, newMaxPrice) {
+        const collRef = collection(firestore, "prix_mercurial");
+        const q = query(collRef);
+
+        getDocs(q).then(async (querySnapshot) => {
+            if (!querySnapshot.empty) {
+                // Only update the first document (the one with date, vari, min, max)
+                const firstDoc = querySnapshot.docs[0];
+                const docRef = doc(firestore, "prix_mercurial", firstDoc.id);
+                await updateDoc(docRef, {
+                    min: newMinPrice,
+                    max: newMaxPrice
+                });
+                console.log("Prix mercurial mis à jour !");
+            } else {
+                console.log("Aucun document trouvé pour prix_mercurial");
+            }
+        })
+    }
+
+    openDiaglogModifPrixMercurial(){
+        if (!this.#dialog) return;
+        const model = `
+            <form method="dialog" class="form dialog-form signup-form">
+                <h3>Modifier le prix mercurial du cacao</h3>
+                <label for="input-prix-mercurial-min">Prix mercurial minime ($):</label>
+                <input type="number" id="input-prix-mercurial-min" name="input-prix-mercurial-min" required min="0" step="0.01">
+
+                <label for="input-prix-mercurial-max">Prix mercurial Max ($):</label>
+                <input type="number" id="input-prix-mercurial-max" name="input-prix-mercurial-max" required min="0" step="0.01">
+                <div class="dialog-actions form-group">
+                    <button type="submit" class="btn btn-primary btn-success">Enregistrer</button>
+                    <button type="button" class="btn btn-danger">Annuler</button>
+                </div>
+            </form>
+        `;
+
+        this.#dialog.innerHTML = model;
+        this.#dialog.showModal();
+
+        const form = this.#dialog.querySelector("form");
+        const btnCancel = this.#dialog.querySelector(".btn-danger");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const minValue = parseFloat(form["input-prix-mercurial-min"].value);
+            const maxValue = parseFloat(form["input-prix-mercurial-max"].value);
+            if (isNaN(minValue) || minValue < 0 || isNaN(maxValue) || maxValue < 0 || minValue > maxValue) {
+                alert("Veuillez entrer des prix valides (min ≤ max, tous ≥ 0).");
+                return;
+            }
+            // await this.updateMercurialPrice(minValue, maxValue);
+            this.updateMercurialPrice(minValue, maxValue);
+            this.#dialog.close();
+        });
+
+        btnCancel.addEventListener("click", () => {
+            this.#dialog.close();
+        });
+    }
+
     handleClickEvent (){
         const divUser = document.querySelector("#user-profile");
         
@@ -125,6 +186,11 @@ class ProfileController {
 
             if (target.classList.contains("btn-deconnect")) {
                 checkAuth.deconect();
+                return;
+            }
+
+            if (target.id === "btn-admin-prix-mercurial") {
+                this.openDiaglogModifPrixMercurial();
                 return;
             }
         });
@@ -146,8 +212,9 @@ class ProfileController {
         const stockCacao = customer.data.stock_solde;
         const datecreation = customer.data.datecreation ? customer.data.datecreation.toDate().toLocaleDateString() : "Non spécifié";
         const type = customer.type == "--coope" ? "Coopérative":  customer.type == "--expo" ? "Exportateur" : "Inconnu";
+        const isAdmin = customer.data.isAdmin;
 
-        console.log("le custommer type ", customer.type);
+        console.log("le custommer type ", customer);
 
 
         const model = `
@@ -204,6 +271,7 @@ class ProfileController {
                     <!--<button id="btn-modifier-profil" class="btn btn-secondary">Modifier le profil</button>-->
                     <button id="btn-deconnexion" class="btn btn-deconnect btn-danger">Déconnexion</button>
                     <button id="btn-update-${customer.type == "--coope"?"quant-dispo": "demande"}" class="btn btn-success">Modifier ${customer.type == "--coope" ? "La quantie dispobile": "La demande" } du Cacao</button>
+                    ${isAdmin ? `<button id="btn-admin-prix-mercurial" class="btn btn-primary">Modifier Le prix mercurial</button>` : ""}
                 </div>
             </div>
         `;

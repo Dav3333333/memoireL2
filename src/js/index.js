@@ -65,7 +65,7 @@ class App {
         const mercurialRef = collection(firestore, "prix_mercurial");
         onSnapshot(mercurialRef, (snapshot) => {
             snapshot.forEach((doc) => {
-                document.querySelector(".header-right .price strong").textContent =  doc.data().prix_dollars
+                document.querySelector(".header-right .price strong").textContent =  doc.data().min + " $ a " + doc.data().max;
                 return;
             });
         });
