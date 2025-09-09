@@ -161,7 +161,12 @@ class Authcontroller {
                     window.removeEventListener("hashchange", this.onHashChange)
                     window.location.href = "index.html";
                 } catch (error) {
-                    form.querySelector(".btn-sub").removeChild(loader)
+                    const feedBackError = form.querySelector("#feedback-error");
+                    if(feedBackError){
+                        feedBackError.textContent = "Échec de la connexion. Vérifiez vos identifiants.";
+                        feedBackError.style.color = "red";
+                    }
+                    form.querySelector(".btn-sub").removeChild(loader);
                     console.error("Erreur de connexion :", error.message);
                 }
             });
@@ -398,6 +403,7 @@ class Authcontroller {
             <h2>Connexion</h2>
             <input id="email" name="email" type="email" placeholder="Email" required />
             <input id="password"  name="password" type="password" placeholder="Mot de passe" required />
+            <small id="feedback-error"></small>
             <button type="submit" class="btn-sub">Se connecter</button>
             <div class="switch-link">
                 Pas encore de compte ? <a href="#signup">Créer un compte</a>
