@@ -120,8 +120,8 @@ class ProfileController {
                 const firstDoc = querySnapshot.docs[0];
                 const docRef = doc(firestore, "prix_mercurial", firstDoc.id);
                 await updateDoc(docRef, {
-                    vari:{min: newMinPrice,
-                    max: newMaxPrice}
+                    min: newMinPrice,
+                    max: newMaxPrice
                 });
                 console.log("Prix mercurial mis à jour !");
             } else {

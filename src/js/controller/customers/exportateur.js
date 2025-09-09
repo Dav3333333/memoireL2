@@ -107,7 +107,7 @@ class ExpotateurController {
     async init() {
         try {
             this.#user = await authManager.getUserFirestore();
-            this.#initCooperatives();
+            dashboardController.init();
             this.#handleClickMainContainer();
         } catch (error) {
             console.error("Error initializing customers:", error);
