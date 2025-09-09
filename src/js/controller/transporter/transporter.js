@@ -46,6 +46,13 @@ class Transporters {
                 </div>
             </div>
         `;
+        this.#handleClickEvent();
+    }
+
+    #handleClickEvent(){
+        this.#principalContainer.addEventListener("click", (e)=>{
+            console.log(e);
+        });
     }
 }
 
