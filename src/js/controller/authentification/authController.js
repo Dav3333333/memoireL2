@@ -115,7 +115,7 @@ class Authcontroller {
                                 ville: data.ville,
                                 quartier: data.quartier,
                                 avenu: data.avenu,
-                                numero: data.numero,
+                                numero: data.numero?? "Inconu",
                                 geo_loc: data.geolocalisation 
                                     ? { lat: parseFloat(data.geolocalisation.split(",")[0].trim()), long: parseFloat(data.geolocalisation.split(",")[1].trim()) }
                                     : { lat: 0, long: 0 },
@@ -284,17 +284,17 @@ class Authcontroller {
     
             <div class="form-group">
                 <label for="num-impots">Numéro d’impôts</label>
-                <input type="text" id="numero_impots" name="numero_impots" placeholder="Numéro d’impôts" required />
+                <input type="text" id="numero_impots" name="numero_impots" placeholder="Numéro d’impôts"  />
             </div>
 
             <div class="form-group">
                 <label for="num-impots">Numéro RCCM</label>
-                <input type="text" id="numero_rccm" name="numero_rccm" placeholder="Numéro RCCM" required />
+                <input type="text" id="numero_rccm" name="numero_rccm" placeholder="Numéro RCCM"  />
             </div>
 
             <div class="form-group">
                 <label for="num-impots">Numéro d'identification national</label>
-                <input type="text" id="id_national" name="id_national" placeholder="Numéro d'identification national" required />
+                <input type="text" id="id_national" name="id_national" placeholder="Numéro d'identification national"  />
             </div>
     
             <div class="form-group">
@@ -362,7 +362,7 @@ class Authcontroller {
     
             <div class="form-group">
                 <label for="numero_impots">Numéro d’impôts</label>
-                <input type="text" id="numero_impots" name="numero_impots" placeholder="Numéro d’impôts" required />
+                <input type="text" id="numero_impots" name="numero_impots" placeholder="Numéro d’impôts"  />
             </div>
     
             <div class="form-group">

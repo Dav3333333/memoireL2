@@ -72,7 +72,7 @@ class DashboardChart {
               this.demandes.push(data.data.demande || 0);
             }else{
               this.cooperatives.push(data.data.nom || "Sans nom");
-              this.quantites.push(data.data.stock_solde || 0);
+              this.quantites.push(data.data.stock_solde);
               this.demandes.push(data.data.demande || 0);
             }
           }else if(data.type === "--expo"){
