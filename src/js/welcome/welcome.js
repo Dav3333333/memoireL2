@@ -1,6 +1,7 @@
 import { dashboardController } from "../controller/dashbord/dashbord";
 import { authManager } from "../httplibs/authApp";
 
+
 class WelcomeController {
     #container;
     #dialog;
@@ -14,7 +15,6 @@ class WelcomeController {
         this.#dialog = document.querySelector("dialog");
 
         this.#container = document.querySelector('.auth-container');
-
 
         document.querySelector("div").appendChild(this.#container);
     }
@@ -35,13 +35,15 @@ class WelcomeController {
         await dashboardController.initilizeInComponent(right);
 
         this.createLeftContent();
+
+        // this.#getMercurail(this.#container.querySelector(".mercurial strong"));
     }
 
     #getMercurail(container){
         const mercurialRef = collection(firestore, "prix_mercurial");
         onSnapshot(mercurialRef, (snapshot) => {
             snapshot.forEach((doc) => {
-                container.textContent =  doc.data().vari.form + " $ a " + doc.data().vari.to;
+                container.textContent =  doc.data().min + " $ a " + doc.data().max;
                 return;
             });
         });
