@@ -37,11 +37,11 @@ class WelcomeController {
         this.createLeftContent();
     }
 
-    #getMercurail(){
+    #getMercurail(container){
         const mercurialRef = collection(firestore, "prix_mercurial");
         onSnapshot(mercurialRef, (snapshot) => {
             snapshot.forEach((doc) => {
-                container.textContent =  doc.data().prix_dollars
+                container.textContent =  doc.data().vari.form + " $ a " + doc.data().vari.to;
                 return;
             });
         });

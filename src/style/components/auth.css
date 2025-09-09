@@ -15,6 +15,7 @@
   align-items: center;
   padding: 3rem;
   text-align: center;
+  overflow-y:auto;
 }
 
 .auth-left img {
@@ -23,8 +24,8 @@
 }
 
 .auth-left h1 {
+  margin-top: 2rem;
   font-size: 2rem;
-  margin-bottom: 1rem;
 }
 
 .auth-left p {

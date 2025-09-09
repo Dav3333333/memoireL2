@@ -1,5 +1,6 @@
 import { createMapModal } from './mapModal.js';
 import { addDoc, collection , doc, serverTimestamp} from 'firebase/firestore';
+import { onSnapshot } from 'firebase/firestore';
 import { firestore } from '../../httplibs/firebaseconfig.js';
 import { authManager } from '../../httplibs/authApp.js';
 
@@ -44,7 +45,18 @@ class Authcontroller {
         this.handleClickEvent();
         this.handleFormSubmit();
         dashboardController.initilizeInComponent(this.#container.querySelector(".container-dashbord"));
+        this.#getMercurail(this.#container.querySelector(".mercurial strong"));
         document.querySelector("div").appendChild(this.#container);
+    }
+
+    #getMercurail(container){
+        const mercurialRef = collection(firestore, "prix_mercurial");
+        onSnapshot(mercurialRef, (snapshot) => {
+            snapshot.forEach((doc) => {
+                container.textContent =  doc.data().vari.from + " $ a " + doc.data().vari.to;
+                return;
+            });
+        });
     }
 
     onHashChange(){
